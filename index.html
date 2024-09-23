@@ -185,7 +185,7 @@
             <h2>Habit List:</h2>
             <div class="habit-item">
                 <div class="habit-header">
-                    <h3>Drink Water</h3>
+                    <h3>Drink water</h3>
                     <div>
                         <button><i class="fa-solid fa-pen"></i></button>
                         <button><i class="fa-solid fa-trash"></i></button>
@@ -194,11 +194,32 @@
                 
                 <div class="habit-body">
                     <div class="habit-progress">
-                        <div class="habit-progress-bar"></div>
+                        <div class="habit-progress-bar" data-percent="62.5"></div>
                     </div>
                     <div class="habit-stats">
                         <p>Goal: 8 glasses</p>
                         <p>Progress: 5/8</p>
+                    </div>
+                </div>
+                <div class="habit-footer"></div>
+            </div>
+            
+            <div class="habit-item">
+                <div class="habit-header">
+                    <h3>Read a book</h3>
+                    <div>
+                        <button><i class="fa-solid fa-pen"></i></button>
+                        <button><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+                
+                <div class="habit-body">
+                    <div class="habit-progress">
+                        <div class="habit-progress-bar" data-percent="20"></div>
+                    </div>
+                    <div class="habit-stats">
+                        <p>Goal: 30 pages</p>
+                        <p>Progress: 12/30</p>
                     </div>
                 </div>
                 <div class="habit-footer"></div>
@@ -263,7 +284,12 @@
             modal.style.display = 'none';
         });
 
+        const progress = document.querySelectorAll('.habit-progress-bar');
 
+        progress.forEach((bar) => {
+            const percent = bar.getAttribute('data-percent');
+            bar.style.width = `${percent}%`;
+        });
         
     </script>
 </body>
