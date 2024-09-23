@@ -84,8 +84,50 @@
         background: var(--primary-bg);
         padding: var(--button-padding);
         border-radius: var(--input-radius);
-        cursor: pointer;
         list-style: none;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .habit-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .habit-header button {
+        background: transparent;
+        color: var(--primary-color);
+        padding-right: 0;
+        border: none;
+        font-size: 1rem;
+    }
+
+    .habit-body {
+        width: 100%;
+    }
+
+    .habit-progress {
+        width: 100%;
+        height: var(--app-radius);
+        background: hsl(from blueviolet h s l / .2); ;
+        border-radius: var(--input-radius);
+        margin-bottom: var(--input-radius);
+        overflow: hidden;
+    }
+
+    .habit-progress-bar {
+        width: 62.5%;
+        height: 100%;
+        background: blueviolet;
+    }
+
+    .habit-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
     }
 
     .modal {
@@ -118,12 +160,21 @@
         text-align: center;
     }
 
+    .hidden {
+        display: none;
+    }
+
+    header i {
+        cursor: pointer;
+    }
+
 </style>
 
 <body class="dark-mode">
     <div class="app-container">
         <header>
             <i class="fa-solid fa-moon"></i>
+            <i class="fa-solid fa-sun hidden"></i>
             <h1>Habit Tracker</h1>
             <i class="fa-solid fa-question" id="helpBtn"></i>
         </header>
@@ -134,22 +185,30 @@
             <h2>Habit List:</h2>
             <div class="habit-item">
                 <div class="habit-header">
-                    <h3>Habit 1</h3>
+                    <h3>Drink Water</h3>
                     <div>
-                        <button>Edit</button>
-                        <button>Delete</button>
+                        <button><i class="fa-solid fa-pen"></i></button>
+                        <button><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
+                
                 <div class="habit-body">
-                    
+                    <div class="habit-progress">
+                        <div class="habit-progress-bar"></div>
+                    </div>
+                    <div class="habit-stats">
+                        <p>Goal: 8 glasses</p>
+                        <p>Progress: 5/8</p>
+                    </div>
                 </div>
+                <div class="habit-footer"></div>
             </div>
         </section>
 
         <button class="add-btn">Add Habit</button>
     </div>
 
-    <div class="modal" id="modal-instructions">
+    <div class="modal hidden" id="modal-instructions">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Instructions</h2>
@@ -173,6 +232,23 @@
         const helpBtn = document.getElementById('helpBtn');
         const closeModalBtn = document.querySelector('.close-modal');
 
+        function toggleDarkMode() {
+            const body = document.querySelector('body');
+            body.classList.toggle('dark-mode');
+            const sun = document.querySelector('.fa-sun');
+            const moon = document.querySelector('.fa-moon');
+            sun.classList.toggle('hidden');
+            moon.classList.toggle('hidden');
+        }
+
+        const darkModeBtn = document.querySelectorAll('.fa-moon, .fa-sun');
+
+        darkModeBtn.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                toggleDarkMode();
+            });
+        });
+
         helpBtn.addEventListener('click', () => {
             modal.style.display = 'flex';
         });
@@ -186,6 +262,8 @@
         closeModalBtn.addEventListener('click', () => {
             modal.style.display = 'none';
         });
+
+
         
     </script>
 </body>
