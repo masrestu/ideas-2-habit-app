@@ -96,12 +96,15 @@
         width: 100%;
     }
 
-    .habit-header button {
+    .habit-header div {
+        display: flex;
+        gap: var(--app-padding);
+    }
+
+    .habit-header a {
         background: transparent;
         color: var(--primary-color);
-        padding-right: 0;
         border: none;
-        font-size: 1rem;
     }
 
     .habit-body {
@@ -113,7 +116,7 @@
         height: var(--app-radius);
         background: hsl(from blueviolet h s l / .2); ;
         border-radius: var(--input-radius);
-        margin-bottom: var(--input-radius);
+        margin-block: var(--input-radius);
         overflow: hidden;
     }
 
@@ -187,8 +190,8 @@
                 <div class="habit-header">
                     <h3>Drink water</h3>
                     <div>
-                        <button><i class="fa-solid fa-pen"></i></button>
-                        <button><i class="fa-solid fa-trash"></i></button>
+                        <a><i class="fa-solid fa-pen"></i></a>
+                        <a><i class="fa-solid fa-trash"></i></a>
                     </div>
                 </div>
                 
@@ -208,8 +211,8 @@
                 <div class="habit-header">
                     <h3>Read a book</h3>
                     <div>
-                        <button><i class="fa-solid fa-pen"></i></button>
-                        <button><i class="fa-solid fa-trash"></i></button>
+                        <a><i class="fa-solid fa-pen"></i></a>
+                        <a><i class="fa-solid fa-trash"></i></a>
                     </div>
                 </div>
                 
