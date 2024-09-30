@@ -4,10 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- favicon png -->
-    <link rel="icon" type="image/png" href="/favicon.png">
-    
     <title>Habit Tracker App</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,19 +18,44 @@
         <header>
             <i class="fa-solid fa-moon"></i>
             <i class="fa-solid fa-sun"></i>
-            <h1>Habit Tracker</h1>
+            <h1>Add New Habit</h1>
             <i class="fa-solid fa-question" id="helpBtn"></i>
         </header>
 
         <hr>
         
-        <div class="habit-header">
-            <h2>Habit List:</h2>
-            <button class="add-btn" onclick="addHabit()">Add New Habit</button>
-        </div>
-        
-        <section class="habit-list no-scrollbar">
-        </section>
+        <form action="/">
+            <input type="hidden" name="id" id="id">
+            <div class="form-control">
+                <label for="title">Habit Name</label>
+                <input type="text" name="title" id="title" placeholder="Read a book" required>
+            </div>
+            <div class="form-control">
+                <label for="type">Habit Type</label>
+                <!-- radio type selection -->
+                <div>
+                    <input type="radio" name="type" id="type-numeric" value="numeric" checked>
+                    <label for="type-numeric">Progress Habit (Numeric Progress)</label>
+                </div>
+                <div>
+                    <input type="radio" name="type" id="type-binary" value="binary">
+                    <label for="type-binary">Binary Habit (Complete/Incomplete)</label>
+                </div>
+            </div>
+            <div class="form-control numeric-habit">
+                <label for="goal">Goal</label>
+                <input type="number" name="goal" id="goal" placeholder="30" required min="1">
+            </div>
+            <div class="form-control numeric-habit">
+                <label for="unit">Unit</label>
+                <input type="text" name="unit" id="unit" placeholder="pages" required>
+            </div>
+
+            <div class="form-control cta">
+                <button type="submit" class="submit-btn">Add Habit</button>
+                <button type="button" class="reset-btn" onclick="gotoHome()">Back</button>
+            </div>
+        </form>
     </div>
 
     <div class="modal hidden" id="modal-instructions">
@@ -57,7 +78,7 @@
     </div>
 
     <script src="/main.js"></script>
-    <script src="/script.js"></script>
+    <script src="/form.js"></script>
 </body>
 
 </html>
