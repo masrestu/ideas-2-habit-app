@@ -275,6 +275,7 @@ form {
     background-color: transparent;
     border-bottom: 1px solid var(--accent-color);
     color: var(--primary-color);
+    font-family: inherit;
 }
 
 .form-control input[type="radio"] {
