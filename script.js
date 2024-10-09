@@ -15,10 +15,6 @@ function renderHabits(habits) {
         habitItem.innerHTML = `
             <div class="habit-header">
                 <h3>${habit.title}</h3>
-                <div>
-                    <a><i class="fa-solid fa-pen" onclick="editHabit('${habit.id}')" title="Edit Habit"></i></a>
-                    <a><i class="fa-solid fa-trash" onclick="deleteHabit('${habit.id}')" title="Delete Habit"></i></a>
-                </div>
             </div>
             
             <div class="habit-body">
@@ -26,7 +22,6 @@ function renderHabits(habits) {
                     <div class="habit-progress-bar" data-percent="0"></div>
                 </div>
                 <div class="habit-stats">
-                    <p>${habit.frequency.customDays ? "Every " + habit.frequency.customDays + " days" : habit.frequency.type}</p>
                     <div class="habit-action">
                         ${habit.type === 'numeric' ?
                         `<a class="fa-solid fa-minus" onclick="decrementHabit(this)"></a>
@@ -36,10 +31,15 @@ function renderHabits(habits) {
                         <a class="fa-solid fa-check" onclick="completeHabit(this)"></a>`
                         }
                     </div>
+                    <p><i class="fa-solid fa-rotate"></i> ${habit.frequency.customDays ? "Every " + habit.frequency.customDays + " days" : habit.frequency.type}</p>
                 </div>
                 <div class="habit-stats">
-                    <p><i class="fa-solid fa-bullseye"></i> ${new Date(habit.nextDueDate).toDateString()}</p>
-                    <p class="progress-text">In Progress</p>
+                    <p><i class="fa-solid fa-bullseye"></i> ${new Date(habit.nextDueDate).toLocaleDateString()}</p>
+                    <p class="progress-text hidden" style="display:none">In Progress</p>
+                </div>
+                <div class="habit-footer">
+                    <a onclick="editHabit('${habit.id}')" title="Edit Habit">Edit</a>
+                    <a onclick="deleteHabit('${habit.id}')" title="Delete Habit">Delete</a>
                 </div>
                 `
         if (habit.type === 'numeric') {
@@ -49,6 +49,10 @@ function renderHabits(habits) {
         habitItem.innerHTML += `
             </div>
         `;
+
+        if (parseInt(habit.progress) === parseInt(habit.goal)) {
+            habitItem.classList.add('completed');
+        }
         habitList.appendChild(habitItem);
 
         renderProgress(habit.id, habit.progress, habit.goal);
@@ -76,7 +80,7 @@ function renderProgress(habitId, habitProgress = 0, habitGoal = 0, progressBefor
         [...habitActions].forEach(action => action.remove());
         progressText.innerText = "Completed";
         const actionContainer = item.querySelector('.habit-action');
-        const badge = document.createElement('i');
+        const badge = document.createElement('a');
         badge.classList.add('fa-solid', 'fa-medal');
         actionContainer.appendChild(badge);
         if (progressBefore < habitGoal) {
