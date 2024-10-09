@@ -1,8 +1,14 @@
 function renderHabits(habits) {
+    sortHabits();
     const habitList = document.querySelector('.habit-list');
 
     habitList.innerHTML = '';
-    habits.forEach((habit) => {
+    if (!habits.length) {
+        habitList.innerHTML = '<p class="no-habits">No habits yet.</p>';
+        return;
+    }
+
+    habits.forEach(habit => {
         const habitItem = document.createElement('div');
         habitItem.classList.add('habit-item');
         habitItem.setAttribute('data-id', habit.id);
@@ -10,7 +16,7 @@ function renderHabits(habits) {
             <div class="habit-header">
                 <h3>${habit.title}</h3>
                 <div>
-                    <a><i class="fa-solid fa-pen" onclick="editHabit(${habit.id})" title="Edit Habit"></i></a>
+                    <a><i class="fa-solid fa-pen" onclick="editHabit('${habit.id}')" title="Edit Habit"></i></a>
                     <a><i class="fa-solid fa-trash" onclick="deleteHabit('${habit.id}')" title="Delete Habit"></i></a>
                 </div>
             </div>
@@ -19,22 +25,28 @@ function renderHabits(habits) {
                 <div class="habit-progress">
                     <div class="habit-progress-bar" data-percent="0"></div>
                 </div>
+                <div class="habit-stats">
+                    <p>${habit.frequency.customDays ? "Every " + habit.frequency.customDays + " days" : habit.frequency.type}</p>
+                    <div class="habit-action">
+                        ${habit.type === 'numeric' ?
+                        `<a class="fa-solid fa-minus" onclick="decrementHabit(this)"></a>
+                        <p><span class="habit-numeric-progress"></span> / ${habit.goal}</p>
+                        <a class="fa-solid fa-plus" onclick="incrementHabit(this)"></a>` :
+                        `<p><span class="habit-numeric-progress"></span> / ${habit.goal}</p>
+                        <a class="fa-solid fa-check" onclick="completeHabit(this)"></a>`
+                        }
+                    </div>
+                </div>
+                <div class="habit-stats">
+                    <p><i class="fa-solid fa-bullseye"></i> ${new Date(habit.nextDueDate).toDateString()}</p>
+                    <p class="progress-text">In Progress</p>
+                </div>
                 `
         if (habit.type === 'numeric') {
-            habitItem.innerHTML += `
-                <div class="habit-stats">
-                    <p>Goal: ${habit.goal} ${habit.unit}</p>
-                    <p>Progress: <span class="progress-text">${habit.progress}</span>/${habit.goal}</p>
-                </div>`;
+            habitItem.innerHTML += ``;
         }
             
         habitItem.innerHTML += `
-            </div>
-            <div class="habit-footer">
-                ${habit.type === 'numeric' ?
-                `<a class="fa-solid fa-minus" onclick="decrementHabit(this)"></a><a class="fa-solid fa-plus" onclick="incrementHabit(this)"></a>` :
-                `<a class="fa-solid fa-check" onclick="completeHabit(this)"></a>`
-                }
             </div>
         `;
         habitList.appendChild(habitItem);
@@ -44,24 +56,34 @@ function renderHabits(habits) {
 
 }
 
-function renderProgress(habitId, habitProgress = 0, habitGoal = 0) {
+function renderProgress(habitId, habitProgress = 0, habitGoal = 0, progressBefore = habitGoal) {
     const percentage = Math.ceil(habitProgress * 100 / habitGoal);
-    const progressText = document.querySelector(`.habit-item[data-id="${habitId}"] .progress-text`);
-    progressText && (progressText.textContent = habitProgress);
-    const progressBar = document.querySelector(`.habit-item[data-id="${habitId}"] .habit-progress-bar`);
+    const item = document.querySelector(`.habit-item[data-id="${habitId}"]`);
+    if (!item) return;
+    const progressText = item.querySelector(`.habit-item[data-id="${habitId}"] .progress-text`);
+    const progressBar = item.querySelector(`.habit-item[data-id="${habitId}"] .habit-progress-bar`);
     progressBar.dataset.percent = percentage;
     progressBar.style.width = `${percentage}%`;
 
-    const habitFooter = document.querySelector(`.habit-item[data-id="${habitId}"] .habit-footer`);
-    const habitActions = habitFooter.getElementsByTagName('a');
-    const decrementHabitBtn = habitFooter.querySelector(`.fa-minus`);
+    const progress = item.querySelector(`.habit-item[data-id="${habitId}"] .habit-numeric-progress`);
+    if (progress) {
+        progress.innerText = habitProgress;
+    }
+
+    const habitActions = item.querySelectorAll('.habit-stats a');
+    const decrementHabitBtn = item.querySelector(`.fa-minus`);
     if (percentage === 100) {
         [...habitActions].forEach(action => action.remove());
-
-        const completedMark = document.createElement('span');
-        completedMark.classList.add('habit-completed');
-        completedMark.textContent = 'Completed';
-        habitFooter.appendChild(completedMark);
+        progressText.innerText = "Completed";
+        const actionContainer = item.querySelector('.habit-action');
+        const badge = document.createElement('i');
+        badge.classList.add('fa-solid', 'fa-medal');
+        actionContainer.appendChild(badge);
+        if (progressBefore < habitGoal) {
+            const modalCongrats = document.querySelector('#modal-congrats');
+            modalCongrats.querySelector("button").setAttribute("data-id", habitId)
+            modalCongrats.classList.remove('hidden');
+        }
     } else if (percentage === 0) {
         decrementHabitBtn && decrementHabitBtn.classList.add('hidden');
     } else {
@@ -70,14 +92,15 @@ function renderProgress(habitId, habitProgress = 0, habitGoal = 0) {
 }
 
 function incrementHabit(elm) {
-    const habitId = elm.parentElement.parentElement.getAttribute("data-id");
+    const habitId = elm.closest('.habit-item').getAttribute("data-id");
     const habit = allHabits.find((habit) => habit.id === habitId);
+    const progressBefore = habit.progress;
     habit.progress++;
-    renderProgress(habitId, habit.progress, habit.goal);
+    renderProgress(habitId, habit.progress, habit.goal, progressBefore);
 }
 
 function decrementHabit(elm) {
-    const habitId = elm.parentElement.parentElement.getAttribute("data-id");
+    const habitId = elm.closest('.habit-item').getAttribute("data-id");
     const habit = allHabits.find((habit) => habit.id === habitId);
     if (habit.progress > 0) {
         habit.progress--;
@@ -86,25 +109,22 @@ function decrementHabit(elm) {
 }
 
 function completeHabit(elm) {
-    const habitId = elm.parentElement.parentElement.getAttribute("data-id");
+    const habitId = elm.closest('.habit-item').getAttribute("data-id");
     const habit = allHabits.find((habit) => habit.id === habitId);
+    const progressBefore = habit.progress;
     habit.progress = habit.goal;
-    renderProgress(habitId, habit.progress, habit.goal);
+    renderProgress(habitId, habit.progress, habit.goal, progressBefore);
 }
 
 window.addEventListener('click', (event) => {
     if (event.target === modal) {
-        modal.style.display = 'none';
+        event.target.closest(".modal").classList.add("hidden");
     }
 });
 
 function addHabit() {
     window.open('/form', '_self');
 }
-
-window.addEventListener('load', function() {
-    renderHabits(allHabits);
-})
 
 function editHabit(id) {
     window.open(`/form/index.html?id=${id}`, '_self');
@@ -118,3 +138,57 @@ function deleteHabit(id) {
         renderHabits(allHabits);
     }
 }
+
+function setNextHabit(id) {
+    const index = allHabits.findIndex(habit => habit.id === id);
+    if (index !== -1) {
+        const completedDate = new Date();
+
+        if (allHabits[index].frequency.type === "daily") {
+            completedDate.setDate(completedDate.getDate() + 1);
+        } else if (allHabits[index].frequency.type === "weekly") {
+            completedDate.setDate(completedDate.getDate() + 7);
+        } else if (allHabits[index].frequency.type === "custom") {
+            completedDate.setDate(completedDate.getDate() + parseInt(allHabits[index].frequency.customDays));
+        }
+
+        allHabits[index].updatedDate = new Date();
+
+        allHabits[index].nextDueDate = completedDate;
+
+        localStorage.setItem('habits', JSON.stringify(allHabits));
+        renderHabits(allHabits);
+    }
+}
+
+const modalCongratsButton = document.querySelector("#modal-congrats button");
+
+modalCongratsButton.addEventListener('click', (e) => {
+    closeModal(e);
+    const id = e.target.getAttribute("data-id");
+    e.target.closest('.modal').classList.add("hidden");
+    setNextHabit(id);
+})
+
+const dateOnly = (date) => {
+    return new Date(new Date(date).toLocaleDateString());
+}
+
+function resetForNextProgress() {
+    const newHabits = allHabits.map((habit) => {
+        if (parseInt(habit.progress) === parseInt(habit.goal) && dateOnly(habit.updatedDate) < dateOnly(new Date())) {
+            return { ...habit, progress: 0, updatedDate: new Date() };
+        }
+        return habit;
+    });
+    localStorage.setItem('habits', JSON.stringify(newHabits));
+    allHabits.length = 0;
+    setHabits();
+}
+
+window.addEventListener('load', function() {
+    setHabits();
+    applyTheme();
+    resetForNextProgress();
+    renderHabits(allHabits);
+})

@@ -7,7 +7,7 @@
 
     <!-- favicon png -->
     <link rel="icon" type="image/png" href="/favicon.png">
-    
+
     <title>Habit Tracker App</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,12 +27,12 @@
         </header>
 
         <hr>
-        
+
         <div class="habit-header">
             <h2>Habit List:</h2>
-            <button class="add-btn" onclick="addHabit()">Add New Habit</button>
+            <button class="add-btn primary-btn" onclick="addHabit()">Add New Habit</button>
         </div>
-        
+
         <section class="habit-list no-scrollbar">
         </section>
     </div>
@@ -45,10 +45,23 @@
             <hr>
             <div class="modal-body">
                 <ul>
-                    <li>Add habits using the "Add Habit" button.</li>
+                    <li>Add habits using the <b>Add New Habit</b> button.</li>
                     <li>Mark progress daily to track habits.</li>
-                    <li>Click "Edit" to modify or "Delete" to remove.</li>
+                    <li>Click <i class="fa-solid fa-pen"></i> to modify or <i class="fa-solid fa-trash"></i> to remove.</li>
                 </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="close-modal">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal hidden" id="modal-congrats">
+        <div class="modal-content">
+            <div class="modal-body" style="text-align: center;">
+                <span class="confetti" style="font-size: 2.5rem; margin-bottom:1rem; display:inline-block">🎉</span>
+                <p>Congratulations!</p>
+                <p>You have completed a habit!</p>
             </div>
             <div class="modal-footer">
                 <button class="close-modal">Got it!</button>

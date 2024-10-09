@@ -1,19 +1,34 @@
 const habitType = document.getElementsByName('type');
 const numericHabitInput = document.querySelectorAll('.numeric-habit')
+const frequencyInput = document.getElementsByName('frequency');
 
 for (let i = 0; i < habitType.length; i++) {
     habitType[i].addEventListener('change', (event) => {
-        console.log("changed")
         if (event.target.value === 'numeric') {
             [...numericHabitInput].forEach(input => {
                 input.classList.remove('hidden');
-                input.setAttribute("required", "true");
+                input.querySelector("input").setAttribute("required", "true");
+                input.value = '';
             })
         } else {
             [...numericHabitInput].forEach(input => {
                 input.classList.add('hidden')
-                input.setAttribute("required", "false");
+                input.querySelector("input").removeAttribute("required");
             })
+        }
+    });
+}
+
+for (let i = 0; i < frequencyInput.length; i++) {
+    frequencyInput[i].addEventListener('change', (event) => {
+        const grandParent = event.target.parentElement.parentElement;
+        const customDays = grandParent.nextElementSibling;
+        if (event.target.value === 'custom') {
+            customDays.classList.remove('hidden');
+            customDays.querySelector("input").setAttribute("required", "true");
+        } else {
+            customDays.classList.add('hidden');
+            customDays.querySelector("input").removeAttribute("required");
         }
     });
 }
@@ -21,35 +36,41 @@ for (let i = 0; i < habitType.length; i++) {
 // handle submit form
 const form = document.querySelector('form');
 
+
+function saveHabit() {
+    const title = document.getElementById('title').value;
+    const type = document.querySelector('input[name="type"]:checked').value;
+    const goal = document.getElementById('goal').value;
+    const progress = document.getElementById('progress').value;
+    const frequency = document.querySelector('input[name="frequency"]:checked').value;
+    const customDays = document.getElementById('customDays').value;
+
+    const newHabit = new Habit({
+        title,
+        type,
+        goal,
+        progress,
+        frequency: {
+            type: frequency,
+            customDays
+        }
+    })
+
+    if (id) {
+        // remove old habit
+        const index = allHabits.findIndex(habit => habit.id === id);
+        allHabits.splice(index, 1);
+    }
+
+    allHabits.push(newHabit);
+
+    localStorage.setItem('habits', JSON.stringify(allHabits));
+    window.open('/', '_self');
+}
+
 form.addEventListener('submit', (event) => {
     event.preventDefault();
-
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-    data.progress = 0;
-    data.goal = data.goal || 1;
-
-    const id = document.getElementById('id').value;
-    const currentHabits = JSON.parse(localStorage.getItem('habits')) || [];
-    if (id) {
-        data.id = id;
-
-        const habit = currentHabits.find(habit => habit.id === id);
-        habit.title = data.title;
-        habit.type = data.type;
-        habit.goal = data.goal;
-        habit.unit = data.unit;
-        localStorage.setItem('habits', JSON.stringify(currentHabits));
-        window.open('/', '_self');
-    } else {
-        const lastId = getLastId();
-        data.id = String(parseInt(lastId) + 1);
-        setLastId(data.id);
-        
-        currentHabits.push(data);
-        localStorage.setItem('habits', JSON.stringify(currentHabits));
-        window.location.reload();
-    }
+    saveHabit();
 })
 
 function gotoHome() {
@@ -76,7 +97,7 @@ if (id) {
     const formTitle = document.querySelector('header h1');
     const titleInput = document.getElementById('title');
     const goalInput = document.getElementById('goal');
-    const unitInput = document.getElementById('unit');
+    const progressInput = document.getElementById('progress');
     const submitBtn = document.querySelector('.submit-btn');
 
     const currentHabits = JSON.parse(localStorage.getItem('habits')) || [];
@@ -85,10 +106,24 @@ if (id) {
         formTitle.textContent = 'Edit Habit';
         titleInput.value = habit.title;
         document.querySelector(`#type-${habit.type}`).click();
+        document.querySelector(`#frequency-${habit.frequency.type}`).click();
+
+        if (habit.frequency.customDays) {
+            document.getElementById('customDays').value = habit.frequency.customDays;
+        }
+        
+        [...numericHabitInput].forEach(input => {
+            input.querySelector("input").removeAttribute("required");
+        })
         goalInput.value = habit.goal || 1;
-        unitInput.value = habit.unit || '';
+        progressInput.value = habit.progress || 0;
         submitBtn.textContent = 'Update';
 
         titleInput.focus();
     }
 }
+
+window.addEventListener('load', function () {
+    setHabits();
+    applyTheme();
+})

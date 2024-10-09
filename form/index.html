@@ -23,36 +23,64 @@
         </header>
 
         <hr>
-        
+
         <form action="/">
             <input type="hidden" name="id" id="id">
             <div class="form-control">
                 <label for="title">Habit Name</label>
                 <input type="text" name="title" id="title" placeholder="Read a book" required>
             </div>
+
             <div class="form-control">
                 <label for="type">Habit Type</label>
-                <!-- radio type selection -->
-                <div>
-                    <input type="radio" name="type" id="type-numeric" value="numeric" checked>
-                    <label for="type-numeric">Progress Habit (Numeric Progress)</label>
-                </div>
-                <div>
-                    <input type="radio" name="type" id="type-binary" value="binary">
-                    <label for="type-binary">Binary Habit (Complete/Incomplete)</label>
+                <div class="grid">
+                    <div>
+                        <input type="radio" name="type" id="type-binary" value="binary">
+                        <label for="type-binary">Binary</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="type" id="type-numeric" value="numeric" checked>
+                        <label for="type-numeric">Numeric</label>
+                    </div>
                 </div>
             </div>
+
+            <!-- choose frequency between daily, weekly, and custom (every .... days), in radio input -->
+            <div class="form-control">
+                <label for="frequency">Frequency</label>
+                <div class="grid">
+                    <div>
+                        <input type="radio" name="frequency" id="frequency-daily" value="daily" checked>
+                        <label for="frequency-daily">Daily</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="frequency" id="frequency-weekly" value="weekly">
+                        <label for="frequency-weekly">Weekly</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="frequency" id="frequency-custom" value="custom">
+                        <label for="frequency-custom">Custom</label>
+                    </div>
+                </div>
+                <div>
+                    <label for="customDays">Custom Frequency: Every </label>
+                    <input type="text" name="customDays" id="customDays" placeholder="3" class="input-small text-center">
+                    <label for="customDays"> days</label>
+                </div>
+            </div>
+
             <div class="form-control numeric-habit">
                 <label for="goal">Goal</label>
-                <input type="number" name="goal" id="goal" placeholder="30" required min="1">
+                <input type="text" name="goal" id="goal" placeholder="30" required class="numeric">
             </div>
+
             <div class="form-control numeric-habit">
-                <label for="unit">Unit</label>
-                <input type="text" name="unit" id="unit" placeholder="pages" required>
+                <label for="progress">Starting Progress</label>
+                <input type="text" name="progress" id="progress" value="0" required class="numeric">
             </div>
 
             <div class="form-control cta">
-                <button type="submit" class="submit-btn">Add Habit</button>
+                <button type="submit" class="submit-btn primary-btn">Save Habit</button>
                 <button type="button" class="reset-btn" onclick="gotoHome()">Back</button>
             </div>
         </form>
@@ -66,9 +94,12 @@
             <hr>
             <div class="modal-body">
                 <ul>
-                    <li>Add habits using the "Add Habit" button.</li>
-                    <li>Mark progress daily to track habits.</li>
-                    <li>Click "Edit" to modify or "Delete" to remove.</li>
+                    <li><b>Habit Name</b><br />Enter the habit’s name.</li>
+                    <li><b>Type</b><br />Choose <b>Binary</b> (yes/no) or <b>Numeric</b> (numbers).</li>
+                    <li><b>Frequency</b><br />Pick <b>Daily</b>, <b>Weekly</b>, or set a <b>Custom</b> number of days.</li>
+                    <li><b>Goal</b><br />Set your target (automatically 1 for binary habits).</li>
+                    <li><b>Starting Progress</b><br />Add current progress or leave as zero.</li>
+                    <li><b>Save</b><br />Click Save Habit to track.</li>
                 </ul>
             </div>
             <div class="modal-footer">

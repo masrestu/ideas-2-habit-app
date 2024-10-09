@@ -1,15 +1,19 @@
 :root {
+    --fs-100: 0.375rem;
+    --fs-200: 0.625rem;
+    --fs-300: 0.875rem;
+    --fs-400: 1rem;
+    --fs-500: 1.25rem;
+    --fs-600: 2.5rem;
     --primary-bg: #f5f5f5;
     --secondary-bg: #fff;
     --primary-color: #000;
     --secondary-color: #fff;
     --primary-font: "Poppins", sans-serif;
     --app-width: 32rem;
-    --app-padding: 1.25rem;
-    --button-padding: 0.625rem 1.25rem;
-    --app-radius: 0.625rem;
-    --input-radius: 0.375rem;
+    --button-padding: var(--fs-200) var(--fs-500);
     --accent-color: blueviolet;
+    --accent-color-100: hsl(from var(--accent-color) h s l / 0.2);
     --main-box-shadow: hsl(from var(--primary-color) h s calc(l + 90)) 0px 2px 8px 0px;
 }
 
@@ -51,8 +55,8 @@ body {
     font-family: var(--primary-font);
     display: flex;
     justify-content: center;
-    align-items: center;
     height: 100dvh;
+    padding-top: var(--fs-500);
 }
 
 .app-container,
@@ -60,11 +64,15 @@ body {
     position: relative;
     background: var(--secondary-bg);
     width: var(--app-width);
-    padding: var(--app-padding);
-    border-radius: var(--app-radius);
+    padding: var(--fs-500);
+    border-radius: var(--fs-200);
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+
+.modal {
+    justify-content: center;
 }
 
 .app-container {
@@ -85,7 +93,7 @@ button,
     color: var(--secondary-color);
     padding: var(--button-padding);
     border: none;
-    border-radius: var(--input-radius);
+    border-radius: var(--fs-100);
     cursor: pointer;
     font-weight: 600;
 }
@@ -93,17 +101,17 @@ button,
 .habit-list {
     display: flex;
     flex-direction: column;
-    gap: var(--app-radius);
+    gap: var(--fs-400);
     overflow-y: scroll;
 }
 
 .habit-item {
     background: var(--primary-bg);
     padding: var(--button-padding);
-    border-radius: var(--input-radius);
+    border-radius: var(--fs-100);
     list-style: none;
     display: flex;
-    gap: var(--input-radius);
+    gap: var(--fs-100);
     flex-direction: column;
 }
 
@@ -116,7 +124,7 @@ button,
 
 .habit-header div {
     display: flex;
-    gap: var(--app-padding);
+    gap: var(--fs-500);
 }
 
 .habit-header a, .habit-footer a {
@@ -127,14 +135,16 @@ button,
 
 .habit-body {
     width: 100%;
+    display: grid;
+    row-gap: var(--fs-100);
 }
 
 .habit-progress {
     width: 100%;
-    height: var(--app-radius);
-    background: hsl(from var(--accent-color) h s l / 0.2);
-    border-radius: var(--input-radius);
-    margin-block: var(--input-radius);
+    height: var(--fs-200);
+    background: var(--accent-color-100);
+    border-radius: var(--fs-100);
+    margin-block: var(--fs-100);
     overflow: hidden;
 }
 
@@ -150,15 +160,14 @@ button,
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    text-transform: capitalize;
 }
 
-.habit-footer {
+.habit-action {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: var(--app-padding);
-    margin-top: var(--app-radius);
-    width: 100%;
+    gap: var(--fs-300);
 }
 
 .add-btn {
@@ -181,16 +190,22 @@ button,
 
 .modal-content {
     background: var(--secondary-bg);
-    padding: var(--app-padding);
-    border-radius: var(--app-radius);
+    padding: var(--fs-500);
+    border-radius: var(--fs-200);
     max-width: var(--app-width);
     display: flex;
     flex-direction: column;
-    gap: var(--app-padding);
+    align-items: center;
+    gap: var(--fs-500);
+}
+
+.modal-content ul {
+    display: grid;
+    row-gap: var(--fs-300);
 }
 
 .modal-content ul > li {
-    margin-left: var(--app-padding);
+    margin-left: var(--fs-500);
 }
 
 .modal-header,
@@ -206,34 +221,52 @@ header i {
 form {
     display: flex;
     flex-direction: column;
-    gap: var(--app-padding);
+    gap: var(--fs-500);
     background-color: var(--primary-bg);
-    padding: var(--app-padding);
-    border-radius: var(--app-radius);
+    padding: var(--fs-500);
+    border-radius: var(--fs-200);
+    height: 100%;
 }
 
 .form-control {
     display: flex;
     flex-direction: column;
-    gap: var(--input-radius);
+    gap: var(--fs-100);
 }
 
 .form-control > label::after {
     content: ':';
 }
 
-.form-control > input {
+.form-control input {
     border: none;
-    border-radius: var(--input-radius);
-    padding: var(--app-radius);
+    padding: var(--fs-200);
     font-size: 1rem;
+    background-color: transparent;
+    border-bottom: 1px solid var(--accent-color);
+    color: var(--primary-color);
+}
+
+.form-control input[type="radio"] {
+    accent-color: var(--accent-color);
+}
+
+.form-control input[type="text"]:focus {
+    background-color: var(--accent-color-100);
+    outline: none;
+    border-radius: var(--fs-100);
 }
 
 .form-control.cta {
     flex-direction: row;
     justify-content: flex-end;
-    align-items: center;
-    gap: var(--input-radius);
+    align-items: end;
+    gap: var(--fs-100);
+    flex-grow: 1;
+}
+
+.no-habits {
+    text-align: center;
 }
 
 .hidden {
@@ -249,9 +282,51 @@ form {
     scrollbar-width: none;
 }
 
+.flex {
+    display: flex;
+    gap: var(--fs-500);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.input-small {
+    width: var(--fs-600);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.primary-btn {
+    background-color: var(--accent-color);
+}
+
+div:has(> #customDays) {
+    display: none;
+}
+
+div:has(> div > #frequency-custom:checked) + div:has(> #customDays) {
+    display: block;
+}
+
+hr {
+    border-color: var(--accent-color);
+    width: 100%;
+}
+
+div:has(> input[type="radio"]) {
+    display: flex;
+    gap: var(--fs-100);
+}
+
 @media screen and (max-width: 500px) {
     body {
         background: var(--secondary-bg);
+        font-size: var(--fs-300);
+        padding-top: 0;
     }
 
     .app-container {
