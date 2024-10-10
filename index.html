@@ -58,8 +58,8 @@
 
     <div class="modal hidden" id="modal-congrats">
         <div class="modal-content">
-            <div class="modal-body" style="text-align: center;">
-                <span class="confetti" style="font-size: 2.5rem; margin-bottom:1rem; display:inline-block">🎉</span>
+            <div class="modal-body text-center">
+                <span class="confetti">🎉</span>
                 <p>Congratulations!</p>
                 <p>You have completed a habit!</p>
             </div>
@@ -68,6 +68,24 @@
             </div>
         </div>
     </div>
+
+    <div class="modal hidden" id="modal-alert">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Habit Reminder</h2>
+            </div>
+            <hr>
+            <div class="modal-body">
+                <ol class="reminder-list reminder-today">Due Today:
+                </ol>
+                <ol class="reminder-list reminder-tomorrow">Due Tomorrow:
+                </ol>
+                <p>Stay on track with your habits! 😊</p>
+            </div>
+            <div class="modal-footer">
+                <button class="close-modal">Got it!</button>
+            </div>
+        </div>
 
     <script src="/main.js"></script>
     <script src="/script.js"></script>

@@ -107,3 +107,52 @@ function delay(ms) {
 function closeModal(e) {
     e.target.closest('.modal').classList.add("hidden");
 }
+
+const dateString = (date) => {
+    return new Date(date).toLocaleDateString();
+}
+
+const dateOnly = (date) => {
+    return new Date(dateString(date));
+}
+
+function popupReminder(habits) {
+    const dueToday = habits.filter(habit => dateString(habit.nextDueDate) === dateString(new Date()));
+    const dueTomorrow = habits.filter(habit => dateString(habit.nextDueDate) === dateString(new Date(new Date().setDate(new Date().getDate() + 1))));
+    
+    let reminderText = '';
+    
+    const reminderToday = document.querySelector('.reminder-today');
+    reminderToday.classList.add("hidden");
+    
+    if (dueToday.length > 0) {
+        reminderText = ""
+        reminderToday.innerHTML = '';
+        dueToday.forEach((habit, index) => {
+            reminderText += `<li>${index+1}. ${habit.title}</li>`;
+        });
+        reminderToday.innerHTML = reminderText;
+        reminderToday.classList.remove("hidden");
+    }
+
+    const reminderTomorrow = document.querySelector('.reminder-tomorrow');
+    reminderTomorrow.classList.add("hidden");
+    
+    if (dueTomorrow.length > 0) {
+        reminderText = ""
+        reminderTomorrow.innerHTML = '';
+        dueTomorrow.forEach((habit, index) => {
+            reminderText += `<li>${index+1}. ${habit.title}</li>`;
+        });
+        reminderTomorrow.innerHTML = reminderText;
+        reminderTomorrow.classList.remove("hidden");
+    }
+
+    document.querySelector("#modal-alert").classList.remove("hidden");
+}
+
+function updateHabitStorage() {
+    localStorage.setItem('habits', JSON.stringify(allHabits));
+    allHabits.length = 0;
+    setHabits();
+}
