@@ -314,7 +314,7 @@ form {
 .form-control input {
     border: none;
     padding: var(--fs-200);
-    font-size: var(--fs-500);
+    font-size: inherit;
     background-color: transparent;
     border-bottom: 1px solid var(--primary-color);
     color: var(--primary-color);
