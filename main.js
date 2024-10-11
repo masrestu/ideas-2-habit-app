@@ -80,16 +80,16 @@ function applyTheme() {
 function sortHabits() {
     allHabits.sort((a, b) => {
         // 1. Sort by uncompleted first (progress < goal)
-        const isAUncompleted = parseFloat(a.progress) < parseFloat(a.goal);
-        const isBUncompleted = parseFloat(b.progress) < parseFloat(b.goal);
+        const isAUncompleted = parseInt(a.progress) < parseInt(a.goal);
+        const isBUncompleted = parseInt(b.progress) < parseInt(b.goal);
 
         if (isAUncompleted !== isBUncompleted) {
             return isAUncompleted ? -1 : 1; // Uncompleted comes first
         }
 
         // 2. Sort by closest due date (nextDueDate)
-        const dateA = new Date(a.nextDueDate);
-        const dateB = new Date(b.nextDueDate);
+        const dateA = dateOnly(a.nextDueDate);
+        const dateB = dateOnly(b.nextDueDate);
         if (dateA - dateB !== 0) {
             return dateA - dateB; // Closest due date comes first
         }

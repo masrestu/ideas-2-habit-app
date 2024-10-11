@@ -93,6 +93,7 @@ function renderProgress(habitId, habitProgress = 0, habitGoal = 0, progressBefor
     } else {
         decrementHabitBtn && decrementHabitBtn.classList.remove('hidden');
     }
+    updateHabitStorage();
 }
 
 function incrementHabit(elm) {
