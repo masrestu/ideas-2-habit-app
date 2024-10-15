@@ -119,17 +119,18 @@ const dateOnly = (date) => {
 function popupReminder(habits) {
     const dueToday = habits.filter(habit => dateString(habit.nextDueDate) === dateString(new Date()));
     const dueTomorrow = habits.filter(habit => dateString(habit.nextDueDate) === dateString(new Date(new Date().setDate(new Date().getDate() + 1))));
-    
+    const overdue = habits.filter(habit => dateOnly(habit.nextDueDate) < dateOnly(new Date()));
+
     let reminderText = '';
-    
+
     const reminderToday = document.querySelector('.reminder-today');
     reminderToday.classList.add("hidden");
-    
+
     if (dueToday.length > 0) {
         reminderText = ""
         reminderToday.innerHTML = '';
         dueToday.forEach((habit, index) => {
-            reminderText += `<li>${index+1}. ${habit.title}</li>`;
+            reminderText += `<li>${index + 1}. ${habit.title}</li>`;
         });
         reminderToday.innerHTML = reminderText;
         reminderToday.classList.remove("hidden");
@@ -137,15 +138,28 @@ function popupReminder(habits) {
 
     const reminderTomorrow = document.querySelector('.reminder-tomorrow');
     reminderTomorrow.classList.add("hidden");
-    
+
     if (dueTomorrow.length > 0) {
         reminderText = ""
         reminderTomorrow.innerHTML = '';
         dueTomorrow.forEach((habit, index) => {
-            reminderText += `<li>${index+1}. ${habit.title}</li>`;
+            reminderText += `<li>${index + 1}. ${habit.title}</li>`;
         });
         reminderTomorrow.innerHTML = reminderText;
         reminderTomorrow.classList.remove("hidden");
+    }
+
+    const reminderOverdue = document.querySelector('.reminder-overdue');
+    reminderOverdue.classList.add("hidden");
+
+    if (overdue.length > 0) {
+        reminderText = ""
+        reminderOverdue.innerHTML = '';
+        overdue.forEach((habit, index) => {
+            reminderText += `<li>${index + 1}. ${habit.title}</li>`;
+        });
+        reminderOverdue.innerHTML = reminderText;
+        reminderOverdue.classList.remove("hidden");
     }
 
     document.querySelector("#modal-alert").classList.remove("hidden");

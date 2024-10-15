@@ -1,0 +1,16 @@
+{
+    "name": "Habit Tracker App",
+    "short_name": "Habit Tracker",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#E2BFD9",
+    "theme_color": "#674188",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "icon.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

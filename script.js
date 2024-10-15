@@ -192,26 +192,30 @@ function checkNotification() {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     allHabits.forEach((habit) => {
+        habit.lastNotified = dateString(yesterday);
         if (parseInt(habit.progress) == parseInt(habit.goal)) return true;
 
         if (habit.lastNotified === undefined) habit.lastNotified = yesterday;
         
         if (dateString(habit.lastNotified) === dateString(new Date())) return true;
-        console.log(new Date(habit.lastNotified), "last notified: " + dateString(habit.lastNotified), "today: " + dateString(new Date()));
 
-        if (habit.frequency.type === "daily") {
-            if (dateString(habit.nextDueDate) === dateString(new Date())) {
-                warningHabits.push(habit);
-                habit.lastNotified = dateString(new Date());
-            }
+        if (dateOnly(habit.nextDueDate) < dateOnly(new Date())) {
+            warningHabits.push(habit);
         } else {
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            if ([dateString(tomorrow), dateString(new Date())].includes(dateString(habit.nextDueDate))) {
-                warningHabits.push(habit);
-                habit.lastNotified = dateString(new Date());
+            if (habit.frequency.type === "daily") {
+                if (dateString(habit.nextDueDate) === dateString(new Date())) {
+                    warningHabits.push(habit);
+                }
+            } else {
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                if ([dateString(tomorrow), dateString(new Date())].includes(dateString(habit.nextDueDate))) {
+                    warningHabits.push(habit);
+                }
             }
         }
+        // habit.lastNotified = dateString(new Date());
+
     })
     updateHabitStorage();
     if (warningHabits.length === 0) return;

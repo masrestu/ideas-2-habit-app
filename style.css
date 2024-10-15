@@ -46,7 +46,12 @@ body.dark-mode .fa-moon {
 *::after {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box; 
+    -webkit-touch-callout: none; /* Safari */
+    -webkit-user-select: none; /* Chrome */     
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; 
 }
 
 body {
@@ -269,21 +274,38 @@ button,
     text-align: center;
 }
 
-.reminder-list.reminder-today, .reminder-list.reminder-tomorrow {
+.reminder-list.reminder-today, .reminder-list.reminder-tomorrow, .reminder-list.reminder-overdue {
     row-gap: 0;
 }
 
 .reminder-list li {
     margin-left: var(--fs-600);
-    list-style-type: '🗓️';
+    list-style-type: '🟠';
     padding-inline-start: var(--fs-200);
+}
+
+.reminder-list.reminder-tomorrow li {
+    list-style-type: '🟡';
+}
+
+.reminder-list.reminder-overdue li {
+    list-style-type: '🔴';
 }
 
 .reminder-today::before {
     content: 'Due Today:';
 }
+
 .reminder-tomorrow::before {
     content: 'Due Tomorrow:';
+}
+
+.reminder-overdue::before {
+    content: 'Overdue:';
+}
+
+.alert-footer {
+    font-size: smaller;
 }
 
 header i {
